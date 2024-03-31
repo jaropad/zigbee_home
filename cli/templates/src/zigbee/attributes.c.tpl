@@ -20,10 +20,10 @@ typedef struct {
 } zb_zcl_measurement_type_single_attrs_t;
 
 typedef struct {
-	zb_int16_t measure_value;
-	zb_int16_t min_measure_value;
-	zb_int16_t max_measure_value;
-} zb_zcl_humidity_measurement_attrs_t;
+	zb_uint16_t measure_value;
+	zb_uint16_t min_measure_value;
+	zb_uint16_t max_measure_value;
+} zb_zcl_soil_moisture_attrs_t;
 
 typedef struct {
 	zb_int8_t zone_state;
@@ -36,6 +36,14 @@ typedef struct {
 	zb_uint8_t number_of_zone_sens_levels_supported;
 	zb_uint8_t current_zone_sens_level;
 } zb_zcl_ias_zone_attrs_t;
+
+typedef struct {
+	zb_uint8_t voltage;
+	zb_uint8_t rated_voltage;
+	zb_uint8_t alarm_mask;
+	zb_uint8_t voltage_min_threshold;
+	zb_uint8_t percentage_remaining;
+} zb_zcl_power_config_attrs_t;
 
 //
 {{end}}

@@ -39,8 +39,12 @@ func fromConstructor(constr any) func() Sensor {
 
 var knownSensors = map[string]func() Sensor{
 	// Generic
-	"on_off":  fromType[*base.OnOff],
-	"contact": fromConstructor(base.NewContact),
+	"on_off":       fromType[*base.OnOff],
+	"power_config": fromType[*base.PowerConfiguration],
+	"contact":      fromConstructor(base.NewContact),
+	// Later we can just alias this to `soil_moisture`
+	// if `soil_moisture` will not be used otherwise.
+	"soil_moisture_adc": fromType[*base.SoilMoistureADC],
 	// Generic ias zone sensor.
 	// While it is defined here - for now it is
 	// not useful much, as it only can be used

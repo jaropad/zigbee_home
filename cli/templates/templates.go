@@ -8,7 +8,6 @@ import (
 	"io/fs"
 	"os"
 	"path"
-	"strconv"
 	"strings"
 	"text/template"
 	"time"
@@ -26,15 +25,20 @@ import (
 //go:embed src/modules/*/dts/bindings/sensor/*.yaml src/modules/*/zephyr/*
 var TemplateFS embed.FS
 
+// This map can be removed in favor of cluster telling
+// which template it want's to use, or try
+// CVarName value as template as well.
 var knownClusterTemplates = map[cluster.ID]string{
-	cluster.ID_BASIC:                    "basic",
-	cluster.ID_DEVICE_TEMP_CONFIG:       "device_temp_config",
-	cluster.ID_ON_OFF:                   "on_off",
-	cluster.ID_TEMP_MEASUREMENT:         "temperature",
-	cluster.ID_REL_HUMIDITY_MEASUREMENT: "humidity",
-	cluster.ID_PRESSURE_MEASUREMENT:     "pressure",
-	cluster.ID_CARBON_DIOXIDE:           "carbon_dioxide",
-	cluster.ID_IAS_ZONE:                 "ias_zone",
+	cluster.ID_BASIC:                     "basic",
+	cluster.ID_POWER_CONFIG:              "power_config",
+	cluster.ID_DEVICE_TEMP_CONFIG:        "device_temp_config",
+	cluster.ID_ON_OFF:                    "on_off",
+	cluster.ID_TEMP_MEASUREMENT:          "temperature",
+	cluster.ID_REL_HUMIDITY_MEASUREMENT:  "humidity",
+	cluster.ID_PRESSURE_MEASUREMENT:      "pressure",
+	cluster.ID_CARBON_DIOXIDE:            "carbon_dioxide",
+	cluster.ID_IAS_ZONE:                  "ias_zone",
+	cluster.ID_SOIL_MOISTURE_MEASUREMENT: "water_content",
 }
 
 type Templates struct {
@@ -68,6 +72,7 @@ type Context struct {
 
 type ContextWithAdditional struct {
 	Context
+	Extender          generator.Extender
 	AdditionalContext any
 }
 
@@ -212,7 +217,7 @@ func (t *Templates) WriteTo(srcDir string, device *config.Device, extenders []ge
 			if err := writeTemplate(
 				template,
 				path.Join(srcDir, fileToWrite.FileName),
-				ContextWithAdditional{Context: ctx, AdditionalContext: fileToWrite.AdditionalContext}); err != nil {
+				ContextWithAdditional{Context: ctx, Extender: extender, AdditionalContext: fileToWrite.AdditionalContext}); err != nil {
 				return fmt.Errorf("write extender file %q: %w", fileToWrite.FileName, err)
 			}
 		}
@@ -397,8 +402,14 @@ func sum(a, b int) int {
 	return a + b
 }
 
-func formatHex(i int) string {
-	return "0x" + strconv.FormatInt(int64(i), 16)
+func formatHex(val any) (string, error) {
+	switch i := val.(type) {
+	case uint8, uint16, uint32, uint64, uint,
+		int8, int16, int32, int64, int:
+		return fmt.Sprintf("%#x", i), nil
+	default:
+		return "", fmt.Errorf("unknown type to format: %T", val)
+	}
 }
 
 func must(err error) {
