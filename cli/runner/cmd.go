@@ -115,7 +115,7 @@ func extendEnv(ncsToolchainPath string, zephyrPath string) []string {
 		"/usr/local/lib/python3.8/site-packages",
 	})
 
-	ldLibraryPath := generateEnvArray(ncsCombinedPath, []string{
+	ldLibraryPath := generateEnvArray(ncsToolchainPath, []string{
 		"/usr/lib",
 		"/usr/lib/x86_64-linux-gnu",
 		"/usr/local/lib",
