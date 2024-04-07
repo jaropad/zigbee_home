@@ -11,6 +11,7 @@ concurrency:
 
 jobs:
   empty:
+    runs-on: self-hosted
     steps:
       - name: empty
         run: echo 'Nothing to see here'
