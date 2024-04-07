@@ -1,0 +1,16 @@
+name: Prepared SDK env
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  empty:
+    steps:
+      - name: empty
+        run: echo 'Nothing to see here'
