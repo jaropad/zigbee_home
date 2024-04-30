@@ -27,8 +27,8 @@ type General struct {
 	NCSVersion       string `yaml:"ncs_version"`
 	ZephyrBase       string `yaml:"zephyr_base"`
 
-	Manufacturer string
-	DeviceName   string
+	Manufacturer string `yaml:"manufacturer"`
+	DeviceName   string `yaml:"device_name"`
 	// Zephyr name for the board
 	Board    string
 	RunEvery time.Duration
@@ -55,6 +55,8 @@ func ParseFromFile(configPath string) (*Device, error) {
 			RunEvery:         time.Minute,
 			NCSToolChainBase: "~/ncs",
 			NCSVersion:       "v2.5.0",
+			Manufacturer:     "FFexix113",
+			DeviceName:       "dongle",
 		},
 	}
 

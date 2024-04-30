@@ -76,10 +76,10 @@ ZBOSS_DECLARE_DEVICE_CTX_{{len .Device.Sensors}}_EP(
 );
 
 /* Manufacturer name (32 bytes). */
-#define DEVICE_INIT_BASIC_MANUF_NAME      "FFenix113"
+#define DEVICE_INIT_BASIC_MANUF_NAME      "{{ .Device.General.Manufacturer }}"
 
 /* Model number assigned by manufacturer (32-bytes long string). */
-#define DEVICE_INIT_BASIC_MODEL_ID        "dongle"
+#define DEVICE_INIT_BASIC_MODEL_ID        "{{ .Device.General.DeviceName }}"
 
 /* First 8 bytes specify the date of manufacturer of the device
  * in ISO 8601 format (YYYYMMDD). The rest (8 bytes) are manufacturer specific.
