@@ -4,6 +4,7 @@ import (
 	"github.com/ffenix113/zigbee_home/templates/extenders"
 	"github.com/ffenix113/zigbee_home/types"
 	"github.com/ffenix113/zigbee_home/types/appconfig"
+	"github.com/ffenix113/zigbee_home/types/devicetree"
 	"github.com/ffenix113/zigbee_home/types/generator"
 	"github.com/ffenix113/zigbee_home/zcl/cluster"
 )
@@ -45,9 +46,14 @@ func (*IASZone) AppConfig() []appconfig.ConfigValue {
 	}
 }
 
+func (z *IASZone) ApplyOverlay(dt *devicetree.DeviceTree) error {
+	btn := devicetree.NewButton(z.Pin)
+	return btn.AttachSelf(dt)
+}
+
 func (z *IASZone) Extenders() []generator.Extender {
 	return []generator.Extender{
 		extenders.GPIO{},
-		extenders.NewButtons(z.Pin),
+		extenders.NewButtons(),
 	}
 }

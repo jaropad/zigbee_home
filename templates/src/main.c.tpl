@@ -356,7 +356,7 @@ int init_templates() {
 	// --- Extenders end
 
 	// --- Sensors start
-	{{- range $i, $sensor := .Device.Sensors}}
+	{{- range $i, $sensor := .Device.Sensors -}}
 	{{ $endpoint := (sum $i 1)}}
 	{{- with (maybeRenderExtender $sensor.Template "main" (sensorCtx $endpoint $.Device $sensor nil))}}
 	{
@@ -370,7 +370,7 @@ int init_templates() {
 		}
 	}
 	{{- end}}
-	{{- end}}
+	{{- end -}}
 	// --- Sensors end
 
 	return 0;

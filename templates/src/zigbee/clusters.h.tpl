@@ -94,12 +94,13 @@
 // This macro is only for devices that have >4 endpoints
 #define ZBOSS_DECLARE_DEVICE_CTX_{{len .Device.Sensors}}_EP( \
 	device_ctx_name, \
-	{{- range .Device.Sensors}}
-	ep
+	{{- $sensorsLen := len .Device.Sensors }}
+	{{- range $i, $_ := .Device.Sensors}}
+	ep{{sum $i 1}}_name{{if not (isLast $i $sensorsLen)}},{{end}} \
 	{{- end}}
 ) \
  ZB_AF_START_DECLARE_ENDPOINT_LIST(ep_list_##device_ctx_name) \
- {{- range $i := .Device.Sensors}}
+ {{- range $i, $_ := .Device.Sensors}}
  &ep{{sum $i 1}}_name, \
  {{- end}}
  ZB_AF_FINISH_DECLARE_ENDPOINT_LIST; \

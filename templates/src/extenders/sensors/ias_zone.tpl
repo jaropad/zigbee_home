@@ -1,9 +1,14 @@
 {{ define "top_level" }}
-// Button will be defined by Buttons extender.
+static const struct gpio_dt_spec {{.Sensor.Pin.Label}} = GPIO_DT_SPEC_GET(DT_NODELABEL({{.Sensor.Pin.Label}}), gpios);
+
+// TODO: Merge Button extender, for it to define necessary buttons.
 
 // For some reason ZB_SCHEDULE_CALLBACK is not defined with current setup,
 // and I can't find a necessary include/config to enable it.
 // So for now - re-define the callback as another callback.
+#ifndef ZBHOME_IAS_ZONE_TOP_LEVEL
+#define ZBHOME_IAS_ZONE_TOP_LEVEL
+
 #define ZB_SCHEDULE_CALLBACK ZB_SCHEDULE_APP_CALLBACK
 void update_zone_status(zb_bufid_t bufid, bool status) {
 	// TODO: Probably this function needs to free bufid somewhere,
@@ -18,6 +23,7 @@ void update_zone_status(zb_bufid_t bufid, bool status) {
 		break;
 	}
 }
+#endif
 {{ end }}
 
 {{ define "button_changed"}}

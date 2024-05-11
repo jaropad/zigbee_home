@@ -42,5 +42,6 @@ func (o *OnOff) ApplyOverlay(overlay *devicetree.DeviceTree) error {
 func (*OnOff) Extenders() []generator.Extender {
 	return []generator.Extender{
 		extenders.GPIO{},
+		extenders.NewLEDs(),
 	}
 }
